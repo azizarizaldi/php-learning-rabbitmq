@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPC Client</title>
+</head>
+<body>
+    <h1>RPC Client</h1>
+    <label for="inputNumber">Enter a number:</label>
+    <input type="number" id="inputNumber">
+    <button onclick="sendRequest()">Calculate Fibonacci</button>
+    <p id="result"></p>
+
+    <script>
+        function sendRequest() {
+            var number = document.getElementById('inputNumber').value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        document.getElementById('result').textContent = xhr.responseText;
+                    } else {
+                        console.error('Error:', xhr.status);
+                    }
+                }
+            };
+
+            xhr.open('POST', 'rpc_client.php');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send('number=' + number);
+        }
+    </script>
+</body>
+</html>

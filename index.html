@@ -53,11 +53,9 @@
                         link.href = window.URL.createObjectURL(blob);
                         link.download = name+'.pdf';
                         link.click();
-
                         $("#downloadBtn").removeAttr("disabled");
                         $("#downloadBtn").text("Download");
-
-                        $("#inputName").val("");
+                        $("#inputName").val("");                   
                     },
                     error: function (xhr, status, error) {
                         // Handle errors, e.g., display an error message

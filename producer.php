@@ -15,7 +15,7 @@ try {
         $headers->set("type","report");
         $headers->set("format","excel");
 
-        $message = new AMQPMessage("Email With Headers $i");
+        $message = new AMQPMessage("Send Queue $i");
         $channel->basic_publish($message, "notification", "email");
     }
 
