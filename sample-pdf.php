@@ -4,6 +4,17 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 // Generate PDF
 $mpdf = new \Mpdf\Mpdf();
+$mpdf->showImageErrors = true;
+
+$watermark = 'https://dev-snbt.scola.id/images/snbt/logo-gaspol.svg';
+
+$mpdf->SetWatermarkImage(
+    $watermark,
+    0.1,
+    array(170,80)
+);
+$mpdf->showWatermarkImage = true;
+
 $mpdf->WriteHTML('
     <!DOCTYPE html>
     <html lang="id">
@@ -62,29 +73,36 @@ $mpdf->WriteHTML('
                 justify-content: center;
                 align-items: center;
                 border: 1px solid black;
-                margin:0;
-                padding:0px;
-                font-size:15px
-            }
+            margin:0;
+            padding:0px;
+            font-size:15px
+        }
 
-            .kotak:nth-child(3) {
-                border-bottom: none;
-            }
+        .kotak:nth-child(3) {
+            border-bottom: none;
+        }
         </style>
     </head>
 
     <body>
         <div class="container">
-            <p class="header">PEMBAHASAN</p>
-            <p class="header bold">TRYOUT SNBT PERTAMA #1</p>
-
-            <div class="kotak">
-                <p class="">SUBTES</p>
-            </div>
-            <div class="kotak">
-                <p class="subtes">PENALARAN UMUR #1</p>
-            </div>
-
+            <table style="width:100%; text-align:center; margin-bottom:20px">
+                <tr>
+                    <td>PEMBAHASAN</td>
+                </tr>
+                <tr>
+                    <td><b>TRYOUT SNBT PERTAMA #1</b></td>
+                </tr>                
+            </table>
+        
+            <table style="width:100%; border: 1px solid black;border-collapse: collapse; text-align:center">
+                <tr>
+                    <td>SUBTES</td>
+                </tr>
+                <tr>
+                    <td><b>PENALARAN UMUM #1</b></td>
+                </tr>                
+            </table>
 
             <p class="soal">1. Konsumsi air putih yang cukup dapat membantu menjaga kesehatan tubuh. Minum air putih
                 sebelum makan dikatakan bisa membantu menurunkan berat badan karena dapat membuat
