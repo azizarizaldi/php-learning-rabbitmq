@@ -45,10 +45,9 @@
                         name: name
                     },
                     xhrFields: {
-                        responseType: 'blob' // Menggunakan blob untuk respons
+                        responseType: 'blob'
                     },
                     success: function (response) {
-                        // Handle success
                         var blob = new Blob([response]);
                         var link = document.createElement('a');
                         link.href = window.URL.createObjectURL(blob);
