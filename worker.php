@@ -12,10 +12,6 @@ try {
 
     $channel->basic_consume("all_notification","email-consumer", false, true, false, false, function (AMQPMessage $message){
         echo ' [✔] Received '.$message->getBody() . PHP_EOL;
-
-        $mpdf = new \Mpdf\Mpdf();
-        $mpdf->WriteHTML('<h1 style="text-align:center">Hai '.$_GET['name'].'!</h1>');
-        $mpdf->Output();    
     });
 
     $channel->consume();
