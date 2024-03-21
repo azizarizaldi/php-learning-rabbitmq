@@ -11,16 +11,28 @@
     <input type="number" id="inputNumber">
     <button onclick="sendRequest()">Calculate Fibonacci</button>
     <p id="result"></p>
-
+    <iframe id="pdfIframe" width="100%" height="500px" frameborder="0"></iframe>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
     <script>
         function sendRequest() {
             var number = document.getElementById('inputNumber').value;
 
             var xhr = new XMLHttpRequest();
+            xhr.responseType = 'blob'; // Set response type to blob
+
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (xhr.status === 200) {
-                        document.getElementById('result').textContent = xhr.responseText;
+                        
+                        let pdfBlob = new Blob([xhr.response], { type: 'application/pdf' });
+                        saveAs(pdfBlob, 'example.pdf');
+                        let iframe = document.getElementById('pdfIframe');
+                        let pdfUrl = URL.createObjectURL(pdfBlob);
+                        iframe.src = pdfUrl;
+
+                        document.getElementById('result').textContent = 'Download Berhasil!';
+
+
                     } else {
                         console.error('Error:', xhr.status);
                     }
