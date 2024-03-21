@@ -51,13 +51,13 @@ class PdfDownloadClient
 
     public function send_request()
     {        
-        $number       = isset($_POST['number']) ? $_POST['number'] : 'XX';
+        $name       = isset($_POST['name']) ? $_POST['name'] : 'XX';
 
         $this->response = null;
         $this->corr_id  = uniqid();
 
         $msg = new AMQPMessage(
-            $number,
+            $name,
             array(
                 'correlation_id' => $this->corr_id,
                 'reply_to' => $this->callback_queue

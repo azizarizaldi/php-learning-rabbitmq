@@ -22,6 +22,11 @@
                     </div>
                     <button type="button" class="btn btn-primary" id="downloadBtn">Download</button>                    
                 </form>
+                <br/>
+                <br/>
+                <p id="result"></p>
+                <iframe id="pdfIframe" width="100%" height="500px" frameborder="0"></iframe>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
             </div>
         </div>
     </div>
@@ -30,29 +35,30 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
     <script>
         $(document).ready(function () {
             $('#downloadBtn').click(function () {
                 var name = $('#inputName').val();
-
+    
                 $("#downloadBtn").attr("disabled",true);
                 $("#downloadBtn").text("Loading...");
                 $.ajax({
-                    url: 'sample-pdf.php',
-                    type: 'GET',
+                    url: 'rpc_client.php',
+                    type: 'POST',
                     data: {
                         name: name
                     },
-                    xhrFields: {
+                    cache:false,
+                    xhrFields:{
                         responseType: 'blob'
                     },
                     success: function (response) {
-                        var blob = new Blob([response]);
-                        var link = document.createElement('a');
-                        link.href = window.URL.createObjectURL(blob);
-                        link.download = name+'.pdf';
-                        link.click();
+                        let iframe = document.getElementById('pdfIframe');
+                        let pdfUrl = window.URL.createObjectURL(new Blob([response], {type: "application/pdf"}))
+                        iframe.src = pdfUrl;
+
+                        document.getElementById('result').textContent = 'Download Berhasil!';
+
                         $("#downloadBtn").removeAttr("disabled");
                         $("#downloadBtn").text("Download");
                         $("#inputName").val("");                   
@@ -60,6 +66,9 @@
                     error: function (xhr, status, error) {
                         // Handle errors, e.g., display an error message
                         console.error('Error:', status, error);
+                        document.getElementById('result').textContent = 'Download Gagal!';
+                        $("#downloadBtn").removeAttr("disabled");
+                        $("#downloadBtn").text("Download");
                     }
                 });
             });
