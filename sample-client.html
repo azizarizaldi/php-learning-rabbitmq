@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download dan Tampilkan PDF</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">Download PDF (RabbitMQ PHP)</h4>
+                        <p class="card-text">Klik tombol di bawah ini untuk mendownload file PDF.</p>
+                        <input type="text" name="name" id="name" class="form-control" placeholder="Masukan text yang ingin dimunculkan di PDF..."/>
+                        <button type="button" class="btn btn-primary mt-3" onclick="downloadPDF()" id="downloadBtn">Download PDF</button>
+                    </div>
+                </div>
+                <div class="mt-3" style="display:none" id="container_pdf">
+                    <hr/>
+                    <h5>PDF Viewer</h5>
+                    <iframe id="pdfIframe" src="" width="100%" height="500px"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function downloadPDF() {
+            const name = document.getElementById('name').value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = 'blob';
+
+            document.getElementById("downloadBtn").disabled = true;
+            document.getElementById("downloadBtn").innerText = "Loading...";
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        let pdfBlob = new Blob([xhr.response], { type: 'application/pdf' });
+                        let iframe = document.getElementById('pdfIframe');
+                        let pdfUrl = URL.createObjectURL(pdfBlob);
+                        iframe.src = pdfUrl;
+
+                        let container_pdf =  document.getElementById('container_pdf');
+                        container_pdf.style = "display:block";
+
+                        document.getElementById("downloadBtn").disabled = false;
+                        document.getElementById("downloadBtn").innerText = "Download PDF";
+
+                    } else {
+                        console.error('Error:', xhr.status);
+                    }
+                }
+            };
+
+            xhr.open('POST', 'rpc_client.php');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.send("name="+name);
+        }
+    </script>
+</body>
+
+</html>
